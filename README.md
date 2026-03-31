@@ -4,16 +4,33 @@
 
 Home Assistant integration for Ratio EV Chargers.
 
+## Screenshots
+
+### Setup
+
+Enter your Ratio account credentials to get started.
+
+![Setup](images/setup.png)
+
+### Device Created
+
+After successful authentication, your charger is automatically discovered.
+
+![Device Created](images/device_created.png)
+
+### Device Dashboard
+
+Monitor and control your Ratio EV Charger directly from Home Assistant.
+
+![Dashboard](images/dashboard.png)
+
 ## Installation
 
 ### HACS (Recommended)
 
 1. Open HACS in your Home Assistant instance.
-2. Click the three dots in the top right corner and select **Custom repositories**.
-3. Add `https://github.com/RowanRamasray/Ratio_Ev_Charger` and select **Integration** as the category.
-4. Click **Add**.
-5. Search for "Ratio EV Charger" in HACS and install it.
-6. Restart Home Assistant.
+2. Search for "Ratio EV Charger" and install it.
+3. Restart Home Assistant.
 
 ### Manual
 
