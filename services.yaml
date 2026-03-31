@@ -1,0 +1,15 @@
+start_charge:
+  description: Start charging on a Ratio EV Charger charger
+  fields:
+    charger_id:
+      description: The charger ID to start charging
+      required: true
+      example: "P00000000026009"
+
+stop_charge:
+  description: Stop charging on a Ratio EV Charger charger
+  fields:
+    charger_id:
+      description: The charger ID to stop charging
+      required: true
+      example: "P00000000026009"

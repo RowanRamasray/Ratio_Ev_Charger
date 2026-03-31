@@ -1,0 +1,11 @@
+{
+  "domain": "ratio_ev_charger",
+  "name": "Ratio EV Charger",
+  "codeowners": ["@RowanRamasray"],
+  "config_flow": true,
+  "documentation": "https://github.com/RowanRamasray/Ratio_Ev_Charger",
+  "integration_type": "device",
+  "iot_class": "cloud_polling",
+  "requirements": ["boto3", "warrant"],
+  "version": "1.2.5"
+}

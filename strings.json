@@ -1,0 +1,21 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Ratio EV Charger",
+        "description": "Enter your Ratio account credentials.",
+        "data": {
+          "username": "Email",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "auth_failed": "Authentication failed. Please check your credentials.",
+      "discovery_failed": "Could not discover charger. Please try again."
+    },
+    "abort": {
+      "already_configured": "This account is already configured."
+    }
+  }
+}
