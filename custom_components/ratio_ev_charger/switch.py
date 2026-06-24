@@ -144,8 +144,7 @@ class RatioChargingSwitch(CoordinatorEntity, SwitchEntity):
         try:
             await self._api.async_start_charge(self._user_id, self._charger_id, self._vehicle_id)
             _LOGGER.info("Charging started successfully")
-            # Refresh coordinator data to get updated state
-            await self.coordinator.async_refresh()
+            await self.coordinator.async_refresh_after_command()
         except Exception as err:
             _LOGGER.error("Failed to start charging: %s", err)
             raise
@@ -155,8 +154,7 @@ class RatioChargingSwitch(CoordinatorEntity, SwitchEntity):
         try:
             await self._api.async_stop_charge(self._user_id, self._charger_id)
             _LOGGER.info("Charging stopped successfully")
-            # Refresh coordinator data to get updated state
-            await self.coordinator.async_refresh()
+            await self.coordinator.async_refresh_after_command()
         except Exception as err:
             _LOGGER.error("Failed to stop charging: %s", err)
             raise
