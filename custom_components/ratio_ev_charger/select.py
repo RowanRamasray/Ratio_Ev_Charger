@@ -143,7 +143,7 @@ class RatioChargingModeSelect(CoordinatorEntity, SelectEntity):
             _LOGGER.info("Charging mode changed to: %s", option)
 
             # Refresh coordinator data to reflect authoritative backend state
-            await self.coordinator.async_refresh()
+            await self.coordinator.async_refresh_after_command()
 
         except Exception as err:
             _LOGGER.error("Failed to set charging mode: %s", err)

@@ -42,6 +42,7 @@ async def async_setup_services(hass: HomeAssistant) -> None:
 
             entry = entries[0]
             api: RatioAPI = hass.data[DOMAIN][entry.entry_id]["api"]
+            coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
             user_id = entry.data.get("user_id")
             vehicle_id = hass.data[DOMAIN][entry.entry_id].get("vehicle_id")
 
@@ -49,6 +50,7 @@ async def async_setup_services(hass: HomeAssistant) -> None:
                 raise HomeAssistantError("Missing user_id or vehicle_id")
 
             await api.async_start_charge(user_id, charger_id, vehicle_id)
+            await coordinator.async_refresh_after_command()
             _LOGGER.info("Started charging on charger %s", charger_id)
         except Exception as err:
             _LOGGER.error("Error starting charge: %s", err)
@@ -66,12 +68,14 @@ async def async_setup_services(hass: HomeAssistant) -> None:
 
             entry = entries[0]
             api: RatioAPI = hass.data[DOMAIN][entry.entry_id]["api"]
+            coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
             user_id = entry.data.get("user_id")
 
             if not user_id:
                 raise HomeAssistantError("Missing user_id")
 
             await api.async_stop_charge(user_id, charger_id)
+            await coordinator.async_refresh_after_command()
             _LOGGER.info("Stopped charging on charger %s", charger_id)
         except Exception as err:
             _LOGGER.error("Error stopping charge: %s", err)

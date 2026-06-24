@@ -36,6 +36,12 @@ class ChargerCoordinator(DataUpdateCoordinator):
         self.user_id = user_id
         self.charger_id = charger_id
 
+    async def async_refresh_after_command(self, delay: float = 2.0) -> None:
+        """Refresh immediately and once more after a short backend propagation delay."""
+        await self.async_request_refresh()
+        await asyncio.sleep(delay)
+        await self.async_request_refresh()
+
     async def _async_update_data(self) -> Any:
         try:
             _LOGGER.debug(
