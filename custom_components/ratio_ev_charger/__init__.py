@@ -27,6 +27,14 @@ _LOGGER = logging.getLogger(__name__)
 PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR, Platform.SWITCH, Platform.SELECT]
 
 
+async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Preserve version 1 entries without changing their account unique ID."""
+    if entry.version == 1:
+        hass.config_entries.async_update_entry(entry, version=2)
+
+    return True
+
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Ratio EV Charger from a config entry."""
     hass.data.setdefault(DOMAIN, {})
@@ -83,14 +91,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         raise ConfigEntryNotReady from err
 
     charger_id = entry.data.get("charger_id")
-    device_registry = dr.async_get(hass)
-    device_registry.async_get_or_create(
-        config_entry_id=entry.entry_id,
-        identifiers={(DOMAIN, charger_id)},
-        name="Ratio EV Charger",
-        manufacturer="Ratio",
-        model="EV Charger",
-    )
 
     hass.data[DOMAIN][entry.entry_id] = {
         "auth": auth_manager,
@@ -102,6 +102,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     }
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    # Entity DeviceInfo uses a generic name. Apply the config-entry title after
+    # platform setup so newly configured chargers remain easy to distinguish.
+    device_registry = dr.async_get(hass)
+    device_registry.async_get_or_create(
+        config_entry_id=entry.entry_id,
+        identifiers={(DOMAIN, charger_id)},
+        name=entry.title,
+        manufacturer="Ratio",
+        model="EV Charger",
+    )
+
     await async_setup_services(hass)
 
     return True

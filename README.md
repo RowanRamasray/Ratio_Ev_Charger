@@ -43,6 +43,10 @@ Monitor and control your Ratio EV Charger directly from Home Assistant.
 2. Search for "Ratio EV Charger".
 3. Enter your credentials and follow the setup flow.
 
+If your Ratio account has multiple chargers, select the charger to add. Repeat
+the setup flow with the same account credentials for each additional charger.
+Each charger is configured as a separate Home Assistant integration entry.
+
 ## Features
 
 - Monitor charger status and sensors
