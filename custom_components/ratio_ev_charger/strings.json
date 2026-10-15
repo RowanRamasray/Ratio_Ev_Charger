@@ -8,6 +8,13 @@
           "username": "Email",
           "password": "Password"
         }
+      },
+      "charger": {
+        "title": "Select charger",
+        "description": "Choose the Ratio EV charger to add.",
+        "data": {
+          "charger_id": "Charger"
+        }
       }
     },
     "error": {
@@ -15,7 +22,7 @@
       "discovery_failed": "Could not discover charger. Please try again."
     },
     "abort": {
-      "already_configured": "This account is already configured."
+      "already_configured": "This charger is already configured."
     }
   }
 }

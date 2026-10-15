@@ -32,19 +32,14 @@ async def async_setup_services(hass: HomeAssistant) -> None:
 
     async def handle_start_charge(call: ServiceCall) -> None:
         """Handle the start_charge service call."""
-        charger_id = call.data.get("charger_id")
+        charger_id: str = call.data["charger_id"]
 
         try:
-            # Get the API instance and configuration from the first entry
-            entries = hass.config_entries.async_entries(DOMAIN)
-            if not entries:
-                raise HomeAssistantError("No Ratio EV Charger integration configured")
-
-            entry = entries[0]
-            api: RatioAPI = hass.data[DOMAIN][entry.entry_id]["api"]
-            coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
-            user_id = entry.data.get("user_id")
-            vehicle_id = hass.data[DOMAIN][entry.entry_id].get("vehicle_id")
+            entry_data = _entry_data_for_charger(hass, charger_id)
+            api: RatioAPI = entry_data["api"]
+            coordinator = entry_data["coordinator"]
+            user_id = entry_data.get("user_id")
+            vehicle_id = entry_data.get("vehicle_id")
 
             if not user_id or not vehicle_id:
                 raise HomeAssistantError("Missing user_id or vehicle_id")
@@ -58,18 +53,13 @@ async def async_setup_services(hass: HomeAssistant) -> None:
 
     async def handle_stop_charge(call: ServiceCall) -> None:
         """Handle the stop_charge service call."""
-        charger_id = call.data.get("charger_id")
+        charger_id: str = call.data["charger_id"]
 
         try:
-            # Get the API instance and configuration from the first entry
-            entries = hass.config_entries.async_entries(DOMAIN)
-            if not entries:
-                raise HomeAssistantError("No Ratio EV Charger integration configured")
-
-            entry = entries[0]
-            api: RatioAPI = hass.data[DOMAIN][entry.entry_id]["api"]
-            coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
-            user_id = entry.data.get("user_id")
+            entry_data = _entry_data_for_charger(hass, charger_id)
+            api: RatioAPI = entry_data["api"]
+            coordinator = entry_data["coordinator"]
+            user_id = entry_data.get("user_id")
 
             if not user_id:
                 raise HomeAssistantError("Missing user_id")
@@ -96,3 +86,12 @@ async def async_setup_services(hass: HomeAssistant) -> None:
     )
 
     _LOGGER.debug("Services registered for %s", DOMAIN)
+
+
+def _entry_data_for_charger(hass: HomeAssistant, charger_id: str) -> dict[str, Any]:
+    """Return runtime data for the config entry that owns a charger."""
+    for entry_data in hass.data.get(DOMAIN, {}).values():
+        if str(entry_data.get("charger_id")) == charger_id:
+            return entry_data
+
+    raise HomeAssistantError(f"Charger {charger_id} is not configured")
